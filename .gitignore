@@ -225,8 +225,7 @@ TSWLatexianTemp*
 # expex forward references with \gathertags
 *-tags.tex
 
-ACM-Reference-Format.bst
-ACM-Reference-Format.bst.1
+ACM-Reference-Format.*
 acmart.cls
 
 # End of https://www.gitignore.io/api/latex

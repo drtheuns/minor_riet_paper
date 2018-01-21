@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -B
+
+echo "Downloading acmart"
+wget http://www.sigplan.org/sites/default/files/acmart/current/acmart.cls 
+
+echo "Downloading reference styles"
+wget https://raw.githubusercontent.com/borisveytsman/acmart/master/ACM-Reference-Format.{bst,bbx,cbx,dbx}
