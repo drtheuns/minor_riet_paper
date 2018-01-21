@@ -398,7 +398,34 @@ emotions on a specific subject.
 %------------------------------------------------
 
 \section{Conclusion}
-To be added
+Research question
+What have we done / defined
+User research
+Conclusion on the prototype
+Some tips for subsequent research
+
+At the beginning of this research we paper, we defined a research question to be answered. This question was:
+\emph{Does the visualization of emotions of young people (aged 16-26) by facial expression recognition software,
+lead to discussion regarding the displayed content?}. In order to answer this question, we first defined how
+we were going to capture emotions using technology. Once we reduced the scope to facial expression recognition,
+we could continue with deciding how to visualize these captured emotions. We defined the emotions to
+\emph{sadness, anger, contempt, disgust, fear, happiness, neutral, and surprise}, and chose a doughnut chart
+as model for the visualization, based on prior research by the Waag Society. We then created a prototype
+using open source tools and libraries, capable of predicting emotions from video and visualizing them according
+to the aforementioned model.
+Finally, we used the created prototype to conduct our user research. We tested the prototype with 13 different
+subjects while interviewing them. The subsequent data analysis concluded that the prototype works largely as
+expected. Our expectations and the results from the prototype were mostly correct, and X out of the 13 subjects
+agreed with the emotions recognized by the prototype. The user research and data analysis also showed us the
+imperfections of the prototype. This includes a number of unexpected emotions measured by the prototype.
+This could be explained by too small of a dataset used to train the machine learning model responsible for
+predicting the emotions. This is, however, something that would have to be researched in more detail in further
+research. 
+We recommend further studies to focus on improving the visualization according to the feedback given to us by
+our research subjects. Furthermore, increasing the dataset for the machine learning, and performing the user
+research on a larger group of subjects. Additionally, the stability and speed of the prototype could also be
+significantly improved, perhaps by switching over from Python to C++, and processing the video while it is still
+being recorded.
 
 %------------------------------------------------
 
