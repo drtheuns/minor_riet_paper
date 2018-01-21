@@ -152,7 +152,90 @@ We have chosen these articles as the basis for our own prototype.
 
 %------------------------------------------------
 
-\section{Methods}
+\section{Material}
+Before creating the prototype, we were free in choosing \emph{how} we were going to implement the emotion
+recognition. However, there were a couple restrictions and requirements. First, a very limited time span
+to create the prototype in. The prototype had to be up and running in roughly 8 weeks so that we could
+use it to perform our research. Secondly, preferable everything about the prototype had to be open source, as
+requested by the Waag Society. Because of prior desk-research, combined with the above restrictions, we
+chose to use facial expression recognition using a camera as the basis for our prototype. This decision was
+further solidified upon the discovery of several articles regarding open source facial expression software
+using Python, OpenCV, Dlib, and Facial Landmarks \cite{gent2016landmarks}.
+
+Aside from the facial expression recognition part of the project, the prototype had to be able to visualize the
+emotions to allow participants to reflect on their emotions and spark a discussion. The goal of the
+visualization is to show the user of the prototype their emotions over a certain time span, and allow the user
+to navigate through this time span. One of our clients, the Waag Society, had already done work regarding
+this subject, including the classification of emotions \cite{plutchik1980general} which we will use, 
+and a possible model for the visualization. We have used both the classification, as well as the model
+as a basis for our prototype. The emotions we have used in our prototype are as follows: \emph{sadness, 
+anger, contempt, disgust, fear, happiness, neutral, and surprise}.
+
+In order to support our user research, the prototype has to go through a number of steps. Below, each of these
+steps is explained in more detail:
+\begin{enumerate}
+    \item{Show a video to the research subject, and start filming at the same time. Store the video for analysis.}
+    \item{Once the video is done, analyze the video and store the results of the analysis.}
+    \item{Visualize the generated model on-screen when the user is ready.}
+\end{enumerate}
+
+The first step, recording and storing the video, is done with OpenCV\footnote{\url{https://opencv.org}} 
+to allow video capture from the webcam. The prototype records at 10 frames per second (FPS).
+Next, the video captures are stored locally on disk.
+Displaying the video that the user of the prototype watches while he is being recorded, is considered part of
+the visualization, and will be discussed later in this chapter.
+
+The analysis and prediction of emotion from video frames is largely the same as described in the series of
+articles written by Paul van Gent \cite{gent2016landmarks}. We use a trained, linear SVM machine learning model
+to predict the emotions on someone's face, based on 68 specific facial landmarks. The linear SVM machine learning
+model was created with scikit-learn\footnote{\url{https://scikit-learn.org}}, an open source machine learning library
+for Python. In order to train the SVM model, we needed a suitable dataset of images, labeled with the
+accompanying emotions. For this, we used the Cohn-Kanade and Extended Cohn-Kanade 
+\cite{kanade2000comprehensive, lucey2010extended} data sets.
+Each image in the dataset is preprocessed before being used to train the SVM model. This includes detecting
+a face on each image, cropping and resizing the face to a common size, removing all color, and using OpenCV's
+CLAHE algorithm. Once the preprocessing and sorting of the images is done, we use Dlib's
+\footnote{\url{https://dlib.net}} shape predictor to fetch the 68 specific facial landmarks. These landmarks,
+together with the label describing the emotion on the face, are then used to train the SVM model. The total
+dataset used to train the model contains 834 images. Using a larger dataset will likely result in a more accurate,
+stable, result.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth, scale=1]{landmarks.png}
+    \caption{68 facial landmarks}
+\end{figure}
+
+The recorded video from our prototype is analyzed frame by frame. Each frame goes through the same preprocessing
+steps as the dataset used to train the SVM model. Once preprocessed, the 68 landmarks from each frame are then
+sent through the SVM model. Since this is a probabilistic model, the percentage chance for each of the 8 emotions
+is returned as a result. We found that these results could fluctuate fairly rapidly in a short number of frames.
+In order to get a more stable result, we've used the average of 5 each emotion over a span of 5 frames (half a
+second). This means that our final prototype predicts the emotions for every half a second of recorded video.
+Once the predictions are made for the entire video, the results are stored in an Sqlite database to be used
+later for the visualization. This also allows us to store the results for analysis later in our research.
+
+The visualization itself is a web application. A Flask\footnote{\url{http://flask.pocoo.org}} webserver 
+is used to allow API access to the rest of the prototype. HTML, CSS and Javascript are then used to 
+create the user interface for the prototype, including the visualization of the model.
+Initially, we wanted to use Qt\footnote{\url{https://qt.io}}, a C++ UI library, but due to a lack of time and
+expertise on our side, we decided to opt for something more familiar, which in this case resulted in a web
+application. The user interface consists of four pages. One to display the video (and start the recording),
+one to manage the sessions with our research participants, one to create a new session, and lastly, one to
+show the visualization. The visualization page uses doughnut charts for each recorded participants. The charts
+are generated using Chart.js\footnote{\url{http://chartjs.org}}, a Javascript library for creating a multitude
+of charts. The predicted emotions are displayed half a second at a time, with a time line slider to allow the
+participant to scroll through the predictions throughout the video.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.45\textwidth, scale=1]{visualization.png}
+    \caption{Visualized model as generated by the prototype}
+\end{figure}
+
+%------------------------------------------------
+
+\section{Method}
 To be added
 
 %------------------------------------------------
@@ -172,7 +255,7 @@ This research was supported by the Amsterdam University of Applied Sciences, the
 institute, and Research Group Crossmedia. We thank Bernadette Schrandt for all the assistance
 with the research, including guidance and feedback. We thank Lodewijk Loos and Douwe-Sjoerd Boschman 
 from Waag Society for the assistance during the creation of the prototype. We thank Wouter Meys for setting
-up the minor and assisting with the research. Lastly, we would like to thank all the participants who helped
+up the minor and advice with the research. Lastly, we would like to thank all the participants who helped
 us test our final prototype.
 
 %----------------------------------------------------------------------------------------
